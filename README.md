@@ -1,1 +1,1 @@
-![d_v1.jpg](assets/design/v1/d_v1.jpg)![v1.jpg](assets/design/v1/v1.jpg)
+![d_v1.jpg](assets/design/v1/d_v1.jpg)
