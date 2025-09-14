@@ -18,5 +18,5 @@ class MultiAgent:
         for tool_name in selected_tools:
             node = self.nodes.get(tool_name)
             if node:
-                state = await node.run(state)
+                state.result = await node.run(state)
         return state.result
