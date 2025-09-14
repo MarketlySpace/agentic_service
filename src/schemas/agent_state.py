@@ -1,5 +1,6 @@
-from pydantic import BaseModel
+from langgraph.graph import StateGraph
 
-class AgentState(BaseModel):
+
+class AgentState(StateGraph):
     query: str
     result: str
