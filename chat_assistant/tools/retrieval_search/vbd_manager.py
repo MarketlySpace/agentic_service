@@ -3,7 +3,7 @@ from langchain_community.document_loaders import PyPDFLoader, UnstructuredURLLoa
 from langchain.text_splitter import CharacterTextSplitter
 from langchain_community.vectorstores import Chroma
 from langchain_openai import OpenAIEmbeddings
-from src.global_config import (
+from chat_assistant.global_config import (
     VECTOR_DB_DIR,
     EMBEDDER_CHUNK_SIZE,
     TIMEOUT,

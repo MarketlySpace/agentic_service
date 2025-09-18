@@ -3,8 +3,8 @@ import json
 from langchain_openai import ChatOpenAI
 from langchain.prompts import ChatPromptTemplate
 from langchain.schema import HumanMessage, SystemMessage
-from src.schemas.agent_state import AgentState
-from src.global_config import TOOLS_AVAILABLE, AVAILABLE_MODEL_URL, TEMPERATURE_ROUTER, GOOUGLE_SEARCH_TOOL_NAME
+from chat_assistant.schemas.agent_state import AgentState
+from chat_assistant.global_config import TOOLS_AVAILABLE, AVAILABLE_MODEL_URL, TEMPERATURE_ROUTER, GOOUGLE_SEARCH_TOOL_NAME
 
 
 class RouterNode:

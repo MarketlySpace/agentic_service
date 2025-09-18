@@ -2,7 +2,7 @@ import os
 from typing import Any
 from langchain.tools import BaseTool
 from langchain.utilities import GoogleSearchAPIWrapper
-from src.global_config import (
+from chat_assistant.global_config import (
     GOOUGLE_SEARCH_TOOL_NAME,
     GOOUGLE_SEARCH_TOOL_DESCRIPTION,
     NUM_SEARCH_RESULT,
