@@ -1,8 +1,11 @@
 import os
+
+from accelerate.utils import MODEL_NAME
 from langchain_community.document_loaders import PyPDFLoader, UnstructuredURLLoader
 from langchain.text_splitter import CharacterTextSplitter
 from langchain_community.vectorstores import Chroma
-from langchain_openai import OpenAIEmbeddings
+from langchain_core.messages import SystemMessage, HumanMessage
+from langchain_openai import OpenAIEmbeddings, ChatOpenAI
 from chat_assistant.global_config import (
     VECTOR_DB_DIR,
     EMBEDDER_CHUNK_SIZE,
@@ -13,6 +16,7 @@ from chat_assistant.global_config import (
     SPLITER_OVERLAP,
     K_SAMPLES,
 )
+
 
 
 class VBDManager:
@@ -39,6 +43,7 @@ class VBDManager:
                 f"Vector DB not found at '{persist_directory}'. "
                 f"Run create_db(...) first to initialize."
             )
+        self.model_name = os.getenv("LLM_RAG_MODEL_NAME", "gpt-3.5-turbo")
 
     def _load_documents(self, source_type, path_or_url):
         match source_type:
@@ -92,7 +97,47 @@ class VBDManager:
         self.delete_document(doc_id)
         self.add_documents(source_type, path_or_url)
 
-    def search(self, query, k=K_SAMPLES):
+    def _search(self, query, k=K_SAMPLES):
         if not self.db:
             raise ValueError("DB is not initialized.")
         return self.db.similarity_search(query, k=k)
+
+    def search_with_llm_messages(
+            self,
+            query: str,
+            k: int = K_SAMPLES,
+            temperature: float = 0.0
+    ):
+
+        if not self.db:
+            raise ValueError("DB is not initialized.")
+
+        docs = self._search(query, k=k)
+
+        if not docs:
+            return {"answer": "No relevant documents found.", "sources": []}
+
+        context_text = "\n\n".join([d.page_content for d in docs])
+
+        llm = ChatOpenAI(model=self.model_name, temperature=temperature)
+
+        system_prompt = """
+        Ти — онлайн-консультант магазину електроніки. 
+        Тобі надано документи з описами товарів, характеристиками, інструкціями та відгуками.
+
+        Інструкції:
+        1. Відповідай **тільки на основі наданих документів**. Не вигадуй нічого.
+        2. Якщо інформації недостатньо або ти не впевнений, чесно скажи:
+           "Я не впевнений у відповіді. Будь ласка, зверніться на support: bohdan@gmail.com".
+        3. Відповідай **ввічливо, зрозуміло та коротко**, щоб користувачу було легко зрозуміти.
+        4. Якщо можливо, виділяй ключові характеристики товару або рекомендації.
+        5. Не включай у відповідь жодних даних, яких немає у наданих документах.
+        """
+
+        messages = [
+            SystemMessage(content=system_prompt),
+            HumanMessage(content=f"Документи:\n{context_text}\n\nПитання: {query}")
+        ]
+
+        answer = llm(messages).content
+        return {"answer": answer}
