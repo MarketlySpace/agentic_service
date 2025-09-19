@@ -1,7 +1,7 @@
-from chat_assistant.nodes.router_node import RouterNode
-from chat_assistant.nodes.google_search_node import GoogleSearch
+from chat_assistant.code_base.nodes.router_node import RouterNode
+from chat_assistant.code_base.nodes.google_search_node import GoogleSearch
 from chat_assistant.global_config import TOOLS_AVAILABLE
-from chat_assistant.schemas.agent_state import AgentState
+from chat_assistant.code_base.schemas.agent_state import AgentState
 
 
 

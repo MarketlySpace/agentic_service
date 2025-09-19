@@ -1,6 +1,6 @@
 from typing import Dict
-from chat_assistant.tools.google_search import GoogleSearch
-from chat_assistant.schemas.agent_state import AgentState
+from chat_assistant.code_base.tools.google_search import GoogleSearch
+from chat_assistant.code_base.schemas.agent_state import AgentState
 
 
 class GoogleNode:
