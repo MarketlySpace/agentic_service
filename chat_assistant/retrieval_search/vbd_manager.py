@@ -15,6 +15,7 @@ from chat_assistant.global_config import (
     SPLITER_CHUNK_SIZE,
     SPLITER_OVERLAP,
     K_SAMPLES,
+    TEMPERATURE,
 )
 
 
@@ -106,7 +107,7 @@ class VBDManager:
             self,
             query: str,
             k: int = K_SAMPLES,
-            temperature: float = 0.0
+            temperature: float = TEMPERATURE
     ):
 
         if not self.db:
